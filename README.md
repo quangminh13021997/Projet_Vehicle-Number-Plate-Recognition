@@ -125,7 +125,38 @@ Résultat :
 
 ```
 cv2.drawContours(img,[largest_rectangle[1]],0,(255,255,255),18)
+
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)# covertir au GRIS SCALE
+blur = cv2.GaussianBlur(gray, (3,3), 0) # Flou l'image pour réduire le bruit
+thresh = cv2.threshold(blur,0,255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+cv2.imshow('PHOTO OBTENU',thresh)
 ```
+Résultat obtenu :
+
+![photo obtenu](https://user-images.githubusercontent.com/46745468/151802240-0d14640d-a9a4-400a-bda4-83c06baeed62.png)
+
+### La 3ème étape : La reconnaissance de caractères et stocker les caractères reconnus dans la variable 'text'
+
+Lire les caractères de l'image de la plaque d'immatriculation à l'aide de la bibliothèque Tesseract et stocker les caractères reconnus dans la variable 'text'
+
+```
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Users\\quang\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract.exe'
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
+opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=1)
+invert = 255 - opening
+data = pytesseract.image_to_string(invert, lang='eng', config='--psm 6')
+print("LA VALEUR DU PLAQUE TROUVE:")
+print(data)
+cv2.waitKey()
+```
+
+Résultat obtenu : 
+
+![ChiffreReconnaissanceParProgram](https://user-images.githubusercontent.com/46745468/151803275-642a99ff-63fd-4042-9d24-5ff413f03111.png)
+
+
+
+
 
 
 
